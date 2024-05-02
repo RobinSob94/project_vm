@@ -1,9 +1,88 @@
 provider "aws" {
+  region     = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region     = var.aws_region
 }
-resource "aws_instance" "example" {
-  ami           = "ami-03c3351e3ce9d04eb"
-  instance_type = "t3.micro"
+
+resource "tls_private_key" "mytf_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "newtfkey" {
+  key_name   = "mytfkey"
+  public_key = tls_private_key.mytf_key.public_key_openssh
+}
+
+resource "aws_instance" "terraform-vm" {
+  ami                    = "ami-0705384c0b33c194c"
+  instance_type          = "t3.micro"
+  vpc_security_group_ids = [aws_security_group.websg.id]
+  key_name               = aws_key_pair.newtfkey.key_name
+
+  tags = {
+    Name = "my-projet"
+  }
+}
+
+resource "aws_security_group" "websg" {
+  name = "projet-sg"
+  ingress {
+    description = "TCP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+output "instance_ips" {
+  value = aws_instance.terraform-vm.public_ip
+}
+
+resource "null_resource" "name" {
+  connection {
+    type        = "ssh"
+    port        = 22
+    user        = "ubuntu"
+    private_key = tls_private_key.mytf_key.private_key_pem
+    host        = aws_instance.terraform-vm.public_ip
+  }
+
+  provisioner "file" {
+    source      = "./script.sh"
+    destination = "/tmp/script.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y figlet",
+      "figlet LEGGO",
+      "mv /tmp/script.sh ./script.sh",
+      "chmod +x ./script.sh",
+      "./script.sh"
+    ]
+  }
+
+  depends_on = [aws_instance.terraform-vm]
 }
