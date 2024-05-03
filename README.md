@@ -1,6 +1,6 @@
 # Projet VM avec Terraform : 
 
-Ce projet vise à automatiser le déploiement d'une machine virtuelle (VM) sur Amazon Web Services (AWS) à l'aide de Terraform. La VM sera configurée pour exécuter une application spécifique à l'aide de Docker et Git, en ouvrant les ports nécessaires pour accéder à l'application depuis l'extérieur de la VM.
+Ce projet vise à automatiser le déploiement d'une machine virtuelle (VM) sur Amazon Web Services (AWS) à l'aide de Terraform. La VM sera configurée pour exécuter une application spécifique à l'aide de Docker et Git, en ouvrant les ports nécessaires pour accéder à l'application depuis l'extérieur de la VM. Projet Etudiant
 
 ## Contenu du projet
 

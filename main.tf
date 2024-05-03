@@ -69,18 +69,18 @@ resource "null_resource" "name" {
   }
 
   provisioner "file" {
-    source      = var.script_path
+    source      =  "./script.sh"
     destination = "/tmp/script.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
+      "sudo apt-get -y update",
       "sudo apt-get install -y figlet",
       "figlet SCRIPT START",
       "mv /tmp/script.sh ./script.sh",
       "chmod +x ./script.sh",
-      "./script.sh"
+      "bash script.sh"
     ]
   }
 
