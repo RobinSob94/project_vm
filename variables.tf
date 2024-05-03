@@ -1,11 +1,11 @@
 variable "aws_access_key" {
   description = "Clé d'accès AWS pour l'authentification"
-  default     = "AKIA2UC3F2PUCYA2TK2K"
+  default     = "Change_me"
 }
 
 variable "aws_secret_key" {
   description = "Clé secrète AWS pour l'authentification"
-  default     = "f+oInvlDPutFzK94x/Ck72xZCJCYmBQZQJf4lv2p"
+  default     = "Change_me"
 }
 
 variable "aws_region" {
