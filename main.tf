@@ -21,7 +21,7 @@ resource "aws_instance" "terraform-vm" {
   key_name               = aws_key_pair.newtfkey.key_name
 
   tags = {
-    Name = "my-projet"
+    Name = var.instance_name
   }
 }
 
@@ -63,13 +63,13 @@ resource "null_resource" "name" {
   connection {
     type        = "ssh"
     port        = 22
-    user        = "ubuntu"
+    user        = var.ssh_username
     private_key = tls_private_key.mytf_key.private_key_pem
     host        = aws_instance.terraform-vm.public_ip
   }
 
   provisioner "file" {
-    source      = "./script.sh"
+    source      = var.script_path
     destination = "/tmp/script.sh"
   }
 
