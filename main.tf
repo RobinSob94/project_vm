@@ -77,7 +77,7 @@ resource "null_resource" "name" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y figlet",
-      "figlet LEGGO",
+      "figlet SCRIPT START",
       "mv /tmp/script.sh ./script.sh",
       "chmod +x ./script.sh",
       "./script.sh"
