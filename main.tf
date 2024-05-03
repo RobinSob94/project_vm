@@ -15,8 +15,8 @@ resource "aws_key_pair" "newtfkey" {
 }
 
 resource "aws_instance" "terraform-vm" {
-  ami                    = "ami-0705384c0b33c194c"
-  instance_type          = "t3.micro"
+  ami                    = var.ami
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.websg.id]
   key_name               = aws_key_pair.newtfkey.key_name
 

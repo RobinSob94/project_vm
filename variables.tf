@@ -27,3 +27,13 @@ variable "script_path" {
   description = "Chemin local vers le script à exécuter sur l'instance EC2"
   default     = "./script.sh"
 }
+
+variable "ami" {
+  description = "code AMI"
+  default     = "ami-0705384c0b33c194c"
+}
+
+variable "instance_type" {
+  description = "Type d'instance EC2"
+  default     = "t3.micro"
+}
